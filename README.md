@@ -1,6 +1,6 @@
 # Wisdom-Myth
 
-(Myth)[http://www.myth.io/] is a CSS preprocessor that lets you write pure CSS without having to worry about slow
+[Myth](http://www.myth.io/) is a CSS preprocessor that lets you write pure CSS without having to worry about slow
 browser support, or even slow spec approval. It's like a CSS polyfill.
 
 Wisdom-Myth integrate Myth pre-processing in Wisdom. So, stylesheets (CSS files) containing Myth directives are
