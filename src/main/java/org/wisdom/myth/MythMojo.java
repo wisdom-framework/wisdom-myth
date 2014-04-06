@@ -157,7 +157,7 @@ public class MythMojo extends AbstractWisdomWatcherMojo implements Constants {
         // Now execute Myth
         try {
             int exit = myth.execute("myth", input.getAbsolutePath(), destination.getAbsolutePath());
-            getLog().debug("Myth execution exiting with " + exit + " status");
+            getLog().debug("Myth execution exiting with status: " + exit);
         } catch (MojoExecutionException e) {
             throw new WatchingException("An error occurred during Myth processing of " + input.getAbsolutePath(), e);
         }
