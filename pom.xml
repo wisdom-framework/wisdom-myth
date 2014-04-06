@@ -5,16 +5,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <groupId>org.wisdom-framework</groupId>
+        <artifactId>wisdom-framework</artifactId>
+        <version>0.4</version>
     </parent>
 
     <artifactId>wisdom-myth-maven-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <properties>
+        <!-- should match Wisdom parent -->
+        <wisdom.version>0.4</wisdom.version>
         <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
     </properties>
 
@@ -23,7 +25,7 @@
         <dependency>
             <groupId>org.wisdom-framework</groupId>
             <artifactId>wisdom-maven-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${wisdom.version}</version>
         </dependency>
 
         <dependency>
@@ -36,19 +38,38 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>1.6.0</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-invoker-plugin</artifactId>
+                <version>1.8</version>
+                <configuration>
+                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                    <postBuildHookScript>verify</postBuildHookScript>
+                    <goals>
+                        <goal>integration-test</goal>
+                    </goals>
+                    <streamLogs>true</streamLogs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>install</goal>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>

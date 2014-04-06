@@ -56,6 +56,7 @@ public class MythMojoTest {
         mojo.basedir = new File(FAKE_PROJECT);
         mojo.buildDirectory = new File(FAKE_PROJECT_TARGET);
         mojo.buildDirectory.mkdirs();
+        mojo.version = "0.3.4";
     }
 
     @Test

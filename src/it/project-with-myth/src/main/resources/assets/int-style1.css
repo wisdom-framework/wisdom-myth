@@ -1,0 +1,13 @@
+:root {
+    var-purple: #847AD1;
+    var-large: 10px;
+}
+
+a {
+    color: var(purple);
+}
+
+pre {
+    padding: var(large);
+}
+

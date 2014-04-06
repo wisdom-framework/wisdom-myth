@@ -21,9 +21,9 @@ package org.wisdom.myth;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.wisdom.maven.Constants;
 import org.wisdom.maven.WatchingException;
@@ -41,7 +41,7 @@ import static org.wisdom.maven.node.NPM.npm;
  * It watches CSS files from 'src/main/resources/assets' and 'src/main/assets' and process them using Myth. If the
  * CSS file is already present in the destination directories (and more recent than the original file),
  * it processes these one, letting this plugin work seamlessly with the Wisdom CSS features.
- *
+ * <p/>
  * Less files are not processed.
  */
 @Mojo(name = "compile-myth", threadSafe = false,
@@ -51,24 +51,31 @@ import static org.wisdom.maven.node.NPM.npm;
 public class MythMojo extends AbstractWisdomWatcherMojo implements Constants {
 
     private static final String MYTH_NPM_NAME = "myth";
-    private static final String MYTH_NPM_VERSION = "0.2.0";
 
     private File internalSources;
     private File destinationForInternals;
     private File externalSources;
     private File destinationForExternals;
 
+    @Parameter(defaultValue = "0.3.4")
+    String version;
+
     private NPM myth;
 
+    /**
+     * Executes the plugin. It compiles all CSS files from the assets directories and process them using Myth.
+     *
+     * @throws MojoExecutionException happens when a CSS file cannot be processed correctly
+     */
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         this.internalSources = new File(basedir, MAIN_RESOURCES_DIR);
         this.destinationForInternals = new File(buildDirectory, "classes");
 
         this.externalSources = new File(basedir, ASSETS_SRC_DIR);
         this.destinationForExternals = new File(getWisdomRootDirectory(), ASSETS_DIR);
 
-        myth = npm(this, MYTH_NPM_NAME, MYTH_NPM_VERSION);
+        myth = npm(this, MYTH_NPM_NAME, version);
 
         try {
             if (internalSources.isDirectory()) {
@@ -95,6 +102,12 @@ public class MythMojo extends AbstractWisdomWatcherMojo implements Constants {
         }
     }
 
+    /**
+     * Checks whether the given file should be processed or not.
+     *
+     * @param file the file
+     * @return {@literal true} if the file must be handled, {@literal false} otherwise
+     */
     @Override
     public boolean accept(File file) {
         return
@@ -104,12 +117,25 @@ public class MythMojo extends AbstractWisdomWatcherMojo implements Constants {
                         && WatcherUtils.hasExtension(file, "css");
     }
 
+    /**
+     * A file is created - process it.
+     *
+     * @param file the file
+     * @return {@literal true} as the pipeline should continue
+     * @throws WatchingException if the processing failed
+     */
     @Override
     public boolean fileCreated(File file) throws WatchingException {
         process(file);
         return true;
     }
 
+    /**
+     * Processes the CSS file.
+     *
+     * @param input the input file
+     * @throws WatchingException if the file cannot be processed
+     */
     private void process(File input) throws WatchingException {
         // We are going to process a CSS file using Myth.
         // First, determine which file we must process, indeed, the file may already have been copies to the
@@ -117,12 +143,12 @@ public class MythMojo extends AbstractWisdomWatcherMojo implements Constants {
         File destination = getOutputCSSFile(input);
 
         // Create the destination folder.
-        if (! destination.getParentFile().isDirectory()) {
+        if (!destination.getParentFile().isDirectory()) {
             destination.getParentFile().mkdirs();
         }
 
         // If the destination file is more recent (or equally recent) than the input file, process that one
-        if (destination.isFile()  && destination.lastModified() >= input.lastModified()) {
+        if (destination.isFile() && destination.lastModified() >= input.lastModified()) {
             getLog().info("Processing " + destination.getAbsolutePath() + " instead of " + input.getAbsolutePath() +
                     " - the file was already processed");
             input = destination;
@@ -138,12 +164,25 @@ public class MythMojo extends AbstractWisdomWatcherMojo implements Constants {
 
     }
 
+    /**
+     * A file is updated - process it.
+     *
+     * @param file the file
+     * @return {@literal true} as the pipeline should continue
+     * @throws WatchingException if the processing failed
+     */
     @Override
     public boolean fileUpdated(File file) throws WatchingException {
         process(file);
         return true;
     }
 
+    /**
+     * A file is deleted - delete the output.
+     *
+     * @param file the file
+     * @return {@literal true} as the pipeline should continue
+     */
     @Override
     public boolean fileDeleted(File file) {
         File theFile = getOutputCSSFile(file);
@@ -152,9 +191,15 @@ public class MythMojo extends AbstractWisdomWatcherMojo implements Constants {
     }
 
 
+    /**
+     * Computes the name of the CSS file to generate (in target) from the given CSS file (from sources).
+     *
+     * @param input the input file
+     * @return the output file
+     */
     private File getOutputCSSFile(File input) {
-        File source = null;
-        File destination = null;
+        File source;
+        File destination;
         if (input.getAbsolutePath().startsWith(internalSources.getAbsolutePath())) {
             source = internalSources;
             destination = destinationForInternals;
