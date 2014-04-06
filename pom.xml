@@ -20,6 +20,13 @@
         <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
     </properties>
 
+    <scm>
+        <url>https://github.com/wisdom-framework/wisdom-myth/</url>
+        <connection>scm:git:git@github.com:wisdom-framework/wisdom-myth.git</connection>
+        <developerConnection>scm:git:git@github.com:wisdom-framework/wisdom-myth.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
 
     <dependencies>
         <dependency>
