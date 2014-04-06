@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>wisdom-myth-maven-plugin</artifactId>
-    <version>0.4</version>
+    <version>0.5-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <properties>
@@ -22,7 +22,7 @@
         <url>https://github.com/wisdom-framework/wisdom-myth/</url>
         <connection>scm:git:git@github.com:wisdom-framework/wisdom-myth.git</connection>
         <developerConnection>scm:git:git@github.com:wisdom-framework/wisdom-myth.git</developerConnection>
-        <tag>wisdom-myth-maven-plugin-0.4</tag>
+        <tag>HEAD</tag>
     </scm>
 
 
