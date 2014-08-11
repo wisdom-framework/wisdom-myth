@@ -1,0 +1,23 @@
+{
+    "name": "wisdom-myth",
+    "version":"0.4",
+    "description": "Myth is a CSS preprocessor that lets you write pure CSS without having to worry about slow browser support, or even slow spec approval. It's like a CSS polyfill. It supports the Wisdom Watch Mode, so any change to a CSS file immediately triggers the processing and updates the output file.",
+ "repository": {
+        "type": "git",
+        "url": "https://github.com/wisdom-framework/wisdom-myth"
+    },
+
+    "author": "The Wisdom Team",
+    "license": {
+            "type": "Apache",
+            "url": "https://github.com/wisdom-framework/wisdom-myth/blob/master/LICENSE.txt"
+        },
+    "homepage": "https://github.com/wisdom-framework/wisdom-myth",
+    "keywords": [
+        "css",
+        "preprocessor",
+        "polyfill",
+        "stylesheets"        
+    ]
+}
+
